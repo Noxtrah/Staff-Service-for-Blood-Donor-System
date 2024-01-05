@@ -112,31 +112,80 @@ export async function createOrQueryDonor(req, res) {
 
     // Update the photoUrl in the database with the CDN endpoint URL
     newDonor.photoUrl = `${cdnEndpointUrl}/${containerName}/${blobName}`;
-    // Retrieve the inserted donor from the database
-    // const insertedDonor = await Donor.findOne({ id: result.recordset[0].id });
 
-    // donors.push(insertedDonor);
-    // console.log(donors);
-
-    // return res.status(201).json(insertedDonor);
   } catch (error) {
     console.error('Error creating donor:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
-export function addBlood(req, res) {
-  const { bloodType, donor, bloodBankInfo } = req.body;
+export async function searchDonor(req, res) {
+  const donorName = req.body.name; // Assuming the request body contains the donor name
+  console.log('Searching for donor with name:', donorName);
+  try {
+      // Connect to the database
+      await connectToDatabase();
+
+      // Query the donor information from the database based on the donor name
+      const queryResult = await getPool()
+          .request()
+          .input('fullname', sql.VarChar, donorName)
+          .query(`
+              SELECT * FROM Donor
+              WHERE fullname = @fullname
+          `);
+
+      const queriedDonor = queryResult.recordset;
+      console.log(queriedDonor)
+
+      if (queriedDonor.length > 0) {
+          // Donor exists, return the queried donor information
+          return res.status(200).json({ donorInfo: queriedDonor });
+      } else {
+          // Donor not found
+          return res.status(404).json({ error: 'No donor found.' });
+      }
+  } catch (error) {
+      console.error('Error searching donor:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+export async function addBlood(req, res) {
+  const { fullname, bloodType, donationDate, units } = req.body;
 
   // Validate required fields
-  if (!bloodType || !donor || !bloodBankInfo) {
+  if (!fullname || !bloodType || !donationDate || !units) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
-  // Logic to add blood to the blood bank (replace with your implementation)
-  // ...
+  try {
+    // Connect to the database
+    await connectToDatabase();
 
-  return res.status(201).json({ message: 'Blood added to the bank successfully.' });
+    // Query the donor information from the database based on the donor name
+    const queryResult = await getPool()
+        .request()
+        .input('fullname', sql.VarChar, fullname)
+        .input('bloodType', sql.VarChar, bloodType)
+        .input('donationDate', sql.Date, donationDate)
+        .input('units', sql.Int, units)
+        .query(`
+          INSERT INTO BloodBank (fullname, bloodType, donationDate, units)
+          VALUES (@fullname, @bloodType, @donationDate, @units)
+        `);
+
+        const affectedRows = queryResult.rowsAffected[0];
+
+        if (affectedRows > 0) {
+            // Blood added successfully
+            return res.status(201).json({ message: 'Blood added to the bank successfully.' });
+        } else {
+            // No rows were affected, indicating an issue with the insertion
+            return res.status(500).json({ error: 'Error adding blood to the bank.' });
+        }
+    } catch (error) {
+        console.error('Error searching donor:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 };
-
-// export { createOrQueryDonor, addBlood };

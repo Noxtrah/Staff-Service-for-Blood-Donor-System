@@ -17,10 +17,12 @@ app.use(cors());
 app.use(express.static('view'));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 // Define a route to serve the HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'view', 'app.html'));
+app.get('/createQueryDonor', (req, res) => {
+  res.sendFile(path.join(__dirname, 'view', 'createQueryDonor.html'));
 });
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'view', 'addBlood.html'));
+});
 app.use('/api', staffRoutes);
 
 app.listen(PORT, () => {

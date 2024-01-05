@@ -134,27 +134,6 @@ async function fetchProvinces() {
           });
       }
     }
-    
-    // function updateDonorList(donorInfo) {
-    //   updateDonorListPage(donorInfo);
-    //   const donorListTextArea = document.getElementById('donorList');
-    //   if (donorInfo) {
-    //     const donorList = Array.isArray(donorInfo) ? formatDonorList(donorInfo) : formatDonorList([donorInfo]);
-    //     donorListTextArea.value = donorList;
-
-    //     if (donorInfo.length > 0 && donorInfo[0].photoUrl) {
-    //       showImageUrlForDonor(donorInfo[0].photoUrl);
-    //     }
-
-    //   } else {
-    //     console.error('Invalid donor information format:', donorInfo);
-    //     donorListTextArea.value = 'Error: Invalid donor information format.';
-    //   }
-    //   document.getElementById('nextPageButton').addEventListener('click', () => {
-    //     currentPage++;
-    //     updateDonorListPage(donorInfo);
-    // });
-    // }
 
 // Function to update the donor list in the textarea based on the current page
     function updateDonorListPage() {

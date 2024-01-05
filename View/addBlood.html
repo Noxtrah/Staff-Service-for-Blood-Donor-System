@@ -1,0 +1,29 @@
+<!-- addBlood.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Blood to Bank</title>
+</head>
+<body>
+  <h1>Add Blood to Bank</h1>
+  <form id="addBloodForm">
+    <label for="donorName">Donor Name:</label>
+    <input type="text" id="donorName" required>
+    <button type="button" id="searchButton">Search</button>
+
+    <label for="bloodType">Blood Type:</label>
+    <input type="text" id="bloodType" readonly>
+
+    <label for="donationDate">Donation Date:</label>
+    <input type="text" id="donationDate" readonly>
+
+    <label for="units">Units:</label>
+    <input type="number" id="units" required>
+
+    <button type="button" id="addBloodButton">Add Blood to Bank</button>
+  </form>
+  <script src="/public/addBloodHandler.js"></script>
+</body>
+</html>
