@@ -1,6 +1,6 @@
 // app.js
 import express from 'express';
-import staffRoutes from './Routes/staffRoute.js'; // Note the added file extension
+import staffRoutes from './Routes/staffRoute.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import bodyParser from 'body-parser';
