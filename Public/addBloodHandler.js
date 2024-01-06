@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Function to add blood to the bank
   function addBloodToBank() {
+    const branchName = document.getElementById('branchName').value;
+    const branchPassword = document.getElementById('branchPassword').value;
     const fullname = document.getElementById('donorName').value;
     const bloodType = document.getElementById('bloodType').value;
     const donationDate = document.getElementById('donationDate').value;
@@ -62,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('/api/staff/add-blood', {
       method: 'POST',
       body: JSON.stringify({
+        branchName,
+        branchPassword,
         fullname,
         bloodType,
         donationDate,

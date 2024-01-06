@@ -152,8 +152,13 @@ export async function searchDonor(req, res) {
 }
 
 export async function addBlood(req, res) {
-  const { fullname, bloodType, donationDate, units } = req.body;
+  const { branchName, branchPassword, fullname, bloodType, donationDate, units } = req.body;
 
+  // Validate branch authentication
+  const validBranch = branches.find(branch => branch.name === branchName && branch.password === branchPassword);
+  if (!validBranch) {
+    return res.status(401).json({ error: 'Invalid branch credentials.' });
+  }
   // Validate required fields
   if (!fullname || !bloodType || !donationDate || !units) {
     return res.status(400).json({ error: 'All fields are required.' });
