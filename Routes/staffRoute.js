@@ -12,4 +12,6 @@ router.post('/staff/add-blood', staffController.addBlood);
 
 router.post('/staff/search-donor', staffController.searchDonor);
 
+router.get('/staff/check-available-blood', staffController.getFoundBloods);
+
 export default router;

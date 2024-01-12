@@ -194,3 +194,40 @@ export async function addBlood(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export async function getFoundBloods(req, res) {
+  try {
+    // Connect to the database
+    await connectToDatabase();
+
+    // Query blood requests from the database
+    const bloodRequestsQueryResult = await getPool()
+      .request()
+      .query(`
+        SELECT * FROM BloodRequests
+      `);
+
+    // Query available blood from the blood bank
+    const availableBloodQueryResult = await getPool()
+      .request()
+      .query(`
+        SELECT * FROM BloodBank
+      `);
+
+    // Get the blood requests and available blood data
+    const bloodRequests = bloodRequestsQueryResult.recordset;
+    const availableBlood = availableBloodQueryResult.recordset;
+
+    // Find matching blood based on blood type and units
+    const matchingBlood = availableBlood.filter(blood => {
+      return bloodRequests.some(request =>
+        request.bloodType === blood.bloodType && request.units === blood.units
+      );
+    });
+    console.log(matchingBlood);
+    res.status(200).json({ bloodRequests, matchingBlood });
+  } catch (error) {
+    console.error('Error retrieving blood data from the database:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
